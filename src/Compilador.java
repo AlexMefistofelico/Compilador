@@ -26,7 +26,7 @@ public class Compilador extends Frame {
 	// Declaraciones
 	String fileName = "";
 	File f;
-	FileInputStream FInputs;
+	FileInputStream Finputs;
 	DataInputStream Dinputs;
 	String archivo;
 	String fichero[];
@@ -66,7 +66,7 @@ public class Compilador extends Frame {
 		/*
 		menuItem3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				//DDA
+				menuItem3ActionPerformed(evt);
 			}
 		});
 		*/
@@ -140,7 +140,7 @@ public class Compilador extends Frame {
 		//buttonAbrir.setForeground(new Color(0, 102, 102));
 		buttonAbrir.addActionListener(evt -> {
 			
-			buttonAbrirActionPerformed(evt);
+				buttonAbrirActionPerformed(evt);
 			}
 		);
 
@@ -149,7 +149,7 @@ public class Compilador extends Frame {
 
 		buttonGuardar.setFont(new Font("Dialog", 1, 12));
 		buttonGuardar.setLabel("Guardar");
-		
+		//buttonGuardar.setForeground(new Color(0, 102, 102));
 		buttonGuardar.addActionListener(evt -> {	
 				buttonGuardarActionPerformed(evt);
 			}
@@ -163,7 +163,7 @@ public class Compilador extends Frame {
 		buttonCompilar.setForeground(new Color(0, 102, 102));
 	
 		buttonCompilar.addActionListener(evt -> {	
-		
+				buttonCompilarActionPerformed(evt);
 			}
 		);
 
@@ -242,7 +242,7 @@ public class Compilador extends Frame {
 	
 	private void menuItem3ActionPerformed(ActionEvent evt) {
 		
-		
+	
 		JFileChooser fileChooser = null;
 		// Si no existe el file chooser, crea uno
 		if (fileChooser == null) {
@@ -256,8 +256,8 @@ public class Compilador extends Frame {
 			fileName = fileChooser.getSelectedFile().getAbsolutePath();
 			try {
 				f = new File(fileName);
-				FInputs = new FileInputStream(f);
-				Dinputs = new DataInputStream(FInputs);
+				Finputs = new FileInputStream(f);
+				Dinputs = new DataInputStream(Finputs);
 				String aux = Dinputs.readLine();
 				textAreaCodigo.setText("");
 				while (aux != null) {
@@ -265,7 +265,7 @@ public class Compilador extends Frame {
 					aux = Dinputs.readLine();
 				}
 				Dinputs.close();
-				FInputs.close();
+				Finputs.close();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "El archivo " + archivo
 						+ " no se puede abrir", "Error",
@@ -277,9 +277,7 @@ public class Compilador extends Frame {
 	
 	private void menuItem4ActionPerformed(ActionEvent evt) {
 		
-		
-		
-		
+	
 		JFileChooser fileChooser = null;
 		fileName = "";
 		// Si no existe, crea uno
@@ -302,7 +300,7 @@ public class Compilador extends Frame {
 	}
 	
 	private void menuItem11ActionPerformed(ActionEvent evt) {
-		
+	
 		new Acerca(new Frame(), true).show();
 	}
 	
@@ -334,8 +332,8 @@ public class Compilador extends Frame {
 			fileName = fileChooser.getSelectedFile().getAbsolutePath();
 			try {
 				f = new File(fileName);
-				FInputs = new FileInputStream(f);
-				Dinputs = new DataInputStream(FInputs);
+				Finputs = new FileInputStream(f);
+				Dinputs = new DataInputStream(Finputs);
 				String aux = Dinputs.readLine();
 				textAreaCodigo.setText("");
 				while (aux != null) {
@@ -343,14 +341,13 @@ public class Compilador extends Frame {
 					aux = Dinputs.readLine();
 				}
 				Dinputs.close();
-				FInputs.close();
+				Finputs.close();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "El archivo " + archivo
 						+ " no se puede abrir", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
-
 	}
 	
 	ArrayList error;
@@ -360,7 +357,64 @@ public class Compilador extends Frame {
 	ArrayList pila;
 
 	private void buttonCompilarActionPerformed(ActionEvent evt) {
-	
+		
+		try {
+			String text = textAreaCodigo.getText();
+			java.io.FileWriter fileWriter = new java.io.FileWriter(fileName);
+			java.io.BufferedWriter br = new java.io.BufferedWriter(fileWriter);
+			br.write(text);
+			br.close();
+		} catch (Exception ioe) {
+		}
+		Archivos a = new Archivos();
+		try {
+			if (fileName == "") {
+				JOptionPane.showMessageDialog(null,
+						"No has abierto ningun archivo.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				textAreaErrores.setText(fileName + "\n");
+				fichero = a.leerArchivo(fileName);				
+				Sintactico s = new Sintactico(fichero);
+				error = s.errores;
+				gramatica = s.Producciones;
+				textAreaProducciones.setText("\n");
+				for (int i = 0; i < gramatica.size(); i++) {
+					textAreaProducciones.append(((String) gramatica.get(i)) + "\n");
+				}
+				pila = s.EstadoPila;
+				textAreaPila.setText("\n\n");
+				for (int i = 0; i < pila.size(); i++) {
+					textAreaPila.append(((String) pila.get(i)) + "\n");
+				}
+				textAreaSimbolos.setText("\n");
+				for(int i=0; i<s.analizadorLexico.simbolos.size();i++)
+					textAreaSimbolos.append(((Simbolo)s.analizadorLexico.simbolos.get(i)).getSimbolo()+"\n");
+				textAreaTokens.setText("\n");
+				textAreaTokens.append(s.analizadorLexico.listadoTokens);
+				if (error.size()> 0)
+					textAreaErrores.append("\nMostrar errores\n");
+				for (int i = 0; i < error.size(); i++) {
+					textAreaErrores.append(((Error) error.get(i)).getError()
+							+ " en ");
+					textAreaErrores.append("linea "
+							+ ((Error) error.get(i)).getNumLinea());
+					textAreaErrores.append(", columna "
+							+ ((Error) error.get(i)).getNumColumna() + "\n");
+				}
+				textAreaErrores.append("\nNúmero de errores: " + error.size());
+				if (/*s.contError*/ error.size()== 10)
+					textAreaErrores.append("\nEl numero de errores supera los permitidos. \nLa compilacion ha Finputsalizado");
+				if (/*s.contError*/ error.size()== 0)
+					textAreaErrores.append("\nLa compilacion no ha detectado errores. \nLa compilacion ha Finputsalizado");
+				if (/*s.contError*/ error.size()> 0)
+					textAreaErrores.append("\nSe han detectado errores. La compilacion ha finalizado");
+			}
+		} catch (NoSuchElementException e) {
+			JOptionPane.showMessageDialog(null,
+					"Formato de archivo no valido.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	/** salir de la palicacion*/
 	private void exitForm(WindowEvent evt) {
