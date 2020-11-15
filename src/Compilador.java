@@ -360,15 +360,15 @@ public class Compilador extends Frame {
 		
 		try {
 			String text = textAreaCodigo.getText();
-			java.io.FileWriter fileWriter = new java.io.FileWriter(fileName);
-			java.io.BufferedWriter br = new java.io.BufferedWriter(fileWriter);
+			FileWriter fileWriter = new FileWriter(fileName);
+			BufferedWriter br = new BufferedWriter(fileWriter);
 			br.write(text);
 			br.close();
 		} catch (Exception ioe) {
 		}
 		Archivos a = new Archivos();
 		try {
-			if (fileName == "") {
+			if (fileName == "") {//si no se abrio ningun arch osea null
 				JOptionPane.showMessageDialog(null,
 						"No has abierto ningun archivo.", "Error",
 						JOptionPane.ERROR_MESSAGE);
