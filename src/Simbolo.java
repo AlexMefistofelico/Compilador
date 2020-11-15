@@ -6,8 +6,10 @@
 
 public class Simbolo {
 	/**
-	 * Será un 1 en caso de ser una variable. Será un 2 en caso de ser un
-	 * literal. Será un 3 en caso de ser un número.
+	 * Será un:
+	 *  1 en caso de ser una variable. 
+	 *  2 en caso de ser un literal. 
+	 *	3 en caso de ser un número.
 	 */
 	private int tipoSimbolo;
 	/**
@@ -33,6 +35,9 @@ public class Simbolo {
 	/**
 	 * Variable booleana que informa si el símbolo está o no inicializado.
 	 */
+	
+	
+	
 	private boolean inicializado;
 	/**
 	 * Método constructor que crea el objeto Símbolo
@@ -45,6 +50,7 @@ public class Simbolo {
 	 * @param inicializado Variable booleana que informa si el símbolo está o no inicializado.
 	 */
 	public Simbolo(int tipoSimbolo, int numColumna, int numLinea, String simbolo, String tipo, boolean declarado, boolean inicializado) {
+		
 		this.tipoSimbolo = tipoSimbolo;
 		this.numColumna = numColumna;
 		this.numLinea = numLinea;
@@ -143,14 +149,21 @@ public class Simbolo {
 
 	/**
 	 * Método que devuelve el valor de la variable tipoSimbolo
-	 * @return Será un 1 en caso de ser una variable. Será un 2 en caso de ser un literal. Será un 3 en caso de ser un número.
+	 * @return 
+	 * Será un 1 en caso de ser una variable. 
+	 * Será un 2 en caso de ser un literal. 
+	 * Será un 3 en caso de ser un número.
+	 * 
 	 */
 	public int getTipoSimbolo() {
 		return tipoSimbolo;
 	}
 	/**
 	 * Método que modifica el valor de la variable tipoSimbolo
-	 * @param tipoSimbolo Será un 1 en caso de ser una variable. Será un 2 en caso de ser un literal. Será un 3 en caso de ser un número.
+	 * @param tipoSimbolo 
+	 * Será un 1 en caso de ser una variable. 
+	 * Será un 2 en caso de ser un literal. 
+	 * Será un 3 en caso de ser un número.
 	 */
 	public void setTipoSimbolo(int tipoSimbolo) {
 		this.tipoSimbolo = tipoSimbolo;

@@ -5,9 +5,11 @@
  */
 public class Token {
 	/**
-	 * Será un 0 en caso de ser una palabra reservada. Será un 1 en caso de ser
-	 * una variable. Será un 2 en caso de ser un literal. Será un 3 en caso de
-	 * ser un número.
+	 * Será un:
+	 * 0 en caso de ser una palabra reservada.
+	 * 1 en caso de ser una variable.
+	 * 2 en caso de ser un literal. 
+	 * 3 en caso deser un número.
 	 */
 	private int tipoToken;
 	/**
