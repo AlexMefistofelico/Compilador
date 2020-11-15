@@ -26,8 +26,8 @@ public class Compilador extends Frame {
 	// Declaraciones
 	String fileName = "";
 	File f;
-	FileInputStream FIN;
-	DataInputStream DIN;
+	FileInputStream FInputs;
+	DataInputStream Dinputs;
 	String archivo;
 	String fichero[];
 
@@ -71,21 +71,21 @@ public class Compilador extends Frame {
 		});
 		*/
 		menuItem3.addActionListener(evt -> {
-				
+				menuItem3ActionPerformed(evt);
 			}
 		);
 		
 		menu2.add(menuItem3);
 		menuItem4.setLabel("Guardar como...");
 		menuItem4.addActionListener(evt -> {	
-				
+				menuItem4ActionPerformed(evt);
 			}
 		);
 
 		menu2.add(menuItem4);
 		menuItem1.setLabel("Guardar");
 		menuItem1.addActionListener(evt -> {	
-				
+				menuItem1ActionPerformed(evt);
 			}
 		);
 
@@ -140,7 +140,7 @@ public class Compilador extends Frame {
 		//buttonAbrir.setForeground(new Color(0, 102, 102));
 		buttonAbrir.addActionListener(evt -> {
 			
-				
+			buttonAbrirActionPerformed(evt);
 			}
 		);
 
@@ -151,7 +151,7 @@ public class Compilador extends Frame {
 		buttonGuardar.setLabel("Guardar");
 		
 		buttonGuardar.addActionListener(evt -> {	
-		
+				buttonGuardarActionPerformed(evt);
 			}
 		);
 
@@ -230,15 +230,75 @@ public class Compilador extends Frame {
 	}
 
 	private void menuItem1ActionPerformed(ActionEvent evt) {
-		
+		try {
+			String text = textAreaCodigo.getText();
+			FileWriter fileWriter = new FileWriter(fileName);
+			BufferedWriter br = new BufferedWriter(fileWriter);
+			br.write(text);
+			br.close();
+		} catch (Exception ioe) {
+		}
 	}
 	
 	private void menuItem3ActionPerformed(ActionEvent evt) {
 		
+		
+		JFileChooser fileChooser = null;
+		// Si no existe el file chooser, crea uno
+		if (fileChooser == null) {
+			fileChooser = new JFileChooser();
+		}
+		// Valor que retorna al elegir una opcion en el file chooser
+		int retVal = fileChooser.showOpenDialog(this);
+		// Si se escogio Ok, (o abrir)
+		if (retVal == fileChooser.APPROVE_OPTION) {
+			// El path absoluto del archivo elegido
+			fileName = fileChooser.getSelectedFile().getAbsolutePath();
+			try {
+				f = new File(fileName);
+				FInputs = new FileInputStream(f);
+				Dinputs = new DataInputStream(FInputs);
+				String aux = Dinputs.readLine();
+				textAreaCodigo.setText("");
+				while (aux != null) {
+					textAreaCodigo.append(aux + "\n");
+					aux = Dinputs.readLine();
+				}
+				Dinputs.close();
+				FInputs.close();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "El archivo " + archivo
+						+ " no se puede abrir", "Error",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+
 	}
 	
 	private void menuItem4ActionPerformed(ActionEvent evt) {
 		
+		
+		
+		
+		JFileChooser fileChooser = null;
+		fileName = "";
+		// Si no existe, crea uno
+		if (fileChooser == null)
+			fileChooser = new JFileChooser();
+		// Abre un diálogo de guardado de archivos
+		int retVal = fileChooser.showSaveDialog(this);
+		if (retVal == fileChooser.APPROVE_OPTION) {
+			fileName = fileChooser.getSelectedFile().getAbsolutePath();
+			try {
+				String text = textAreaCodigo.getText();
+				java.io.FileWriter fileWriter = new java.io.FileWriter(fileName);
+				java.io.BufferedWriter br = new java.io.BufferedWriter(
+						fileWriter);
+				br.write(text);
+				br.close();
+			} catch (Exception ioe) {
+			}
+		}
 	}
 	
 	private void menuItem11ActionPerformed(ActionEvent evt) {
@@ -248,10 +308,49 @@ public class Compilador extends Frame {
 	
 	private void buttonGuardarActionPerformed(ActionEvent evt) {
 		
+		try {
+			String text = textAreaCodigo.getText();
+			java.io.FileWriter fileWriter = new java.io.FileWriter(fileName);
+			java.io.BufferedWriter br = new java.io.BufferedWriter(fileWriter);
+			br.write(text);
+			br.close();
+		} catch (Exception ioe) {
+		}
+
 	}
 	
 	private void buttonAbrirActionPerformed(ActionEvent evt) {
-			
+		
+		JFileChooser fileChooser = null;
+		// Si no existe el file chooser, crea uno
+		if (fileChooser == null) {
+			fileChooser = new JFileChooser();
+		}
+		// Valor que retorna al elegir una opcion en el file chooser
+		int retVal = fileChooser.showOpenDialog(this);
+		// Si se escogio Ok, (o abrir)
+		if (retVal == fileChooser.APPROVE_OPTION) {
+			// El path absoluto del archivo elegido
+			fileName = fileChooser.getSelectedFile().getAbsolutePath();
+			try {
+				f = new File(fileName);
+				FInputs = new FileInputStream(f);
+				Dinputs = new DataInputStream(FInputs);
+				String aux = Dinputs.readLine();
+				textAreaCodigo.setText("");
+				while (aux != null) {
+					textAreaCodigo.append(aux + "\n");
+					aux = Dinputs.readLine();
+				}
+				Dinputs.close();
+				FInputs.close();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "El archivo " + archivo
+						+ " no se puede abrir", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
+
 	}
 	
 	ArrayList error;
