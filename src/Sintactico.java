@@ -606,17 +606,14 @@ public class Sintactico{
 	 * @param cima Cima de pila en ese instante
 	 * @return variable booleana que indica si la cima es un terminal o un no terminal
 	 */
-	public boolean esTerminal(String cima)
-	{
-		if(cima.equals("<declaraciones>") || cima.equals("<declaracion>") || cima.equals("<tipo>") || cima.equals("<lista_variables>") || 
-		   cima.equals("<ordenes>") || cima.equals("<orden>") || cima.equals("<condicion>") || cima.equals("<comparacion>") || 
-		   cima.equals("<condicion_op>") || cima.equals("<operador>") || cima.equals("<numeros>") || cima.equals("<bucle_while>") || 
-		   cima.equals("<asignar>") || cima.equals("<expresion_arit>") || cima.equals("<operador_arit>") || 
-		   cima.equals("<sig_declaraciones>") || cima.equals("<sig_lista_variables>") || cima.equals("<sig_ordenes>") || cima.equals("<programa>") || 
-		   cima.equals("<exp_arit>") || cima.equals("<sig_condicion>"))
-		   		return false;
-		   else
-		   		return true;
+	public boolean esTerminal(String cima){
+		return 
+		!(cima.equals("<declaraciones>") || cima.equals("<declaracion>") || cima.equals("<tipo>") || cima.equals("<lista_variables>") || 
+		 cima.equals("<ordenes>") || cima.equals("<orden>") || cima.equals("<condicion>") || cima.equals("<comparacion>") || 
+		 cima.equals("<condicion_op>") || cima.equals("<operador>") || cima.equals("<numeros>") || cima.equals("<bucle_while>") || 
+		 cima.equals("<asignar>") || cima.equals("<expresion_arit>") || cima.equals("<operador_arit>") || 
+		 cima.equals("<sig_declaraciones>") || cima.equals("<sig_lista_variables>") || cima.equals("<sig_ordenes>") || cima.equals("<programa>") || 
+		 cima.equals("<exp_arit>") || cima.equals("<sig_condicion>"));
 	}
 	
 	/**
@@ -653,10 +650,8 @@ public class Sintactico{
 	/**
 	 * Método público para eliminar el primer elemento de la pila.
 	 */
-	public void eliminarPila()
-	{
-		int i = Pila.size();
-		Pila.remove(i-1);
+	public void eliminarPila(){
+		Pila.remove(Pila.size()-1);
 	}
 	
 	/**
@@ -710,7 +705,6 @@ public class Sintactico{
 				}
 				else	//Error por párametros extra.
 				{
-				
 					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sintático.- Posible token extra."));			
 					token=tokenSig;
 					pedido=false;
@@ -885,53 +879,6 @@ public class Sintactico{
     		case "<operador_arit>": 		return 20;
     		default :						return 0;
     	}
-		/*
-		int fila = 0;
-		
-		if(cima.equals("<programa>"))
-			fila = 0;
-		else if(cima.equals("<declaraciones>"))
-			fila =  1;
-		else if(cima.equals("<sig_declaraciones>"))
-			fila =  2;
-		else if(cima.equals("<declaracion>"))
-			fila =  3;
-		else if(cima.equals("<tipo>"))
-			fila =  4;
-		else if(cima.equals("<lista_variables>"))
-			fila =  5;
-		else if(cima.equals("<sig_lista_variables>"))
-			fila =  6;
-		else if(cima.equals("<ordenes>"))
-			fila =  7;
-		else if(cima.equals("<sig_ordenes>"))
-			fila =  8;
-		else if(cima.equals("<orden>"))
-			fila =  9;
-		else if(cima.equals("<condicion>"))
-			fila =  10;
-		else if(cima.equals("<sig_condicion>"))
-			fila =  11;
-		else if(cima.equals("<comparacion>"))
-			fila =  12;
-		else if(cima.equals("<condicion_op>"))
-			fila =  13;
-		else if(cima.equals("<operador>"))
-			fila =  14;
-		else if(cima.equals("<numeros>"))
-			fila =  15;
-		else if(cima.equals("<bucle_while>"))
-			fila =  16;
-		else if(cima.equals("<asignar>"))
-			fila =  17;
-		else if(cima.equals("<expresion_arit>"))
-			fila =  18;
-		else if(cima.equals("<exp_arit>"))
-			fila =  19;
-		else if(cima.equals("<operador_arit>"))
-			fila =  20;	
-		return fila;
-		*/
 	}
 
 	/**
@@ -971,66 +918,5 @@ public class Sintactico{
     		case "$": 				return 27;
     		default : 				return 0;
     	}
-    	/*
-		int columna = 0;
-		if(terminal.equals("begin"))
-			columna = 0;
-		else if(terminal.equals("end"))
-			columna =  1;
-		else if(terminal.equals(";"))
-			columna =  2;
-		else if(terminal.equals("entero"))
-			columna =  3;
-		else if(terminal.equals("real"))
-			columna =  4;
-		else if(terminal.equals("identificador"))
-			columna =  5;
-		else if(terminal.equals(","))
-			columna =  6;
-		else if(terminal.equals("if"))
-			columna =  7;
-		else if(terminal.equals("("))
-			columna =  8;
-		else if(terminal.equals(")"))
-			columna =  9;
-		else if(terminal.equals("else"))
-			columna =  10;
-		else if(terminal.equals("="))
-			columna =  11;
-		else if(terminal.equals("<="))
-			columna =  12;
-		else if(terminal.equals(">="))
-			columna =  13;
-		else if(terminal.equals("<>"))
-			columna =  14;
-		else if(terminal.equals("<"))
-			columna =  15;
-		else if(terminal.equals(">"))
-			columna =  16;
-		else if(terminal.equals("num_entero"))
-			columna =  17;
-		else if(terminal.equals("num_real"))
-			columna =  18;
-		else if(terminal.equals("while"))
-			columna =  19;
-		else if(terminal.equals("endwhile"))
-			columna =  20;
-		else if(terminal.equals(":="))
-			columna =  21;
-		else if(terminal.equals("+"))
-			columna =  22;
-		else if(terminal.equals("*"))
-			columna =  23;
-		else if(terminal.equals("-"))
-			columna =  24;
-		else if(terminal.equals("/"))
-			columna =  25;
-		else if(terminal.equals("beginend"))
-			columna =  26;
-		else if(terminal.equals("$"))
-			columna =  27;
-		return columna;
-		*/
 	}
-} //fin de clase.
-
+} 
