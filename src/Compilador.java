@@ -2,7 +2,7 @@
 
 
 /**
- * Clase que muestra el entorno gráfico principal
+ * Clase que muestra el entorno gráfico principalo
  * @author  INF-3631
  * @version 11/11/2020
  */

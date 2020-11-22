@@ -199,7 +199,7 @@ public class Sintactico{
 						//Esto sólo sirve para mostrar dicha información por pantalla
 						Producciones.add("Eliminar terminal -> " + cimaPila);
 						
-						if(pedido==false)
+						if(pedido!=true)
 							token=analizadorLexico.nextToken();
 						else{
 							token=tokenSig;
@@ -256,14 +256,13 @@ public class Sintactico{
 				}
 	      	}
 	  	// Mientras que cima pila es $ y numero de errores es 10
-		}while(cimaPila.equals("$")==false && contError < NROERRORES && token!=null);  
+		}while(cimaPila.equals("$")!=true && contError < NROERRORES && token!=null);  
 	} // Fin del sintactico.
 	
 	/**
 	 * Metodo público para crear la tabla de simbolos.
 	 */
 	public void crearTablaDeAnalisisSintactico(){
-		int i,j, k;
 		/*
 		 * Produccion
 		 * <programa> -> begin <declaraciones><ordenes> end
@@ -779,7 +778,7 @@ public class Sintactico{
 					Producciones.add("Eliminar terminal -> " + cima);
 					token=tokenSig;
 					pedido=false;
-					while((token.getTok()).equals(";")==false){
+					while((token.getTok()).equals(";")!=true){
 						token=analizadorLexico.nextToken();
 					}
 					token=analizadorLexico.nextToken();
@@ -796,7 +795,7 @@ public class Sintactico{
 					Producciones.add("Eliminar terminal -> " + cima);
 					token=tokenSig;
 					pedido=false;
-					while(token.equals("end")==false && token.equals("else")==false){
+					while(token.equals("end")!=true && token.equals("else")!=true){
 						token=analizadorLexico.nextToken();
 					}
 				}
@@ -808,7 +807,7 @@ public class Sintactico{
 					Producciones.add("Eliminar terminal -> " + cima);
 					token=tokenSig;
 					pedido=false;
-					while(token.equals("else")==false){
+					while(token.equals("else")!=true){
 						token=analizadorLexico.nextToken();
 					}
 				}else //Error en en operador de condición.
@@ -827,9 +826,9 @@ public class Sintactico{
 					token=tokenSig;
 					pedido=false;
 					tokenActual = token.getTok();
-					while(tokenActual.equals(")")==false && tokenActual.equals("=")==false && tokenActual.equals("<=")==false && 
-					      tokenActual.equals(">=")==false && tokenActual.equals("<>")==false && tokenActual.equals("<")==false && 
-					      tokenActual.equals(">")==false)
+					while(tokenActual.equals(")")!=true && tokenActual.equals("=")!=true && tokenActual.equals("<=")!=true && 
+					      tokenActual.equals(">=")!=true && tokenActual.equals("<>")!=true && tokenActual.equals("<")!=true && 
+					      tokenActual.equals(">")!=true)
 					{
 						token=analizadorLexico.nextToken();
 						tokenActual = token.getTok();
@@ -845,8 +844,8 @@ public class Sintactico{
 					token=tokenSig;
 					pedido=false;
 					tokenActual = token.getTok();
-					while(tokenActual.equals("+")==false && tokenActual.equals("*")==false && tokenActual.equals("-")==false && 
-					      tokenActual.equals("/")==false && tokenActual.equals(";")==false && tokenActual.equals(")")==false)
+					while(tokenActual.equals("+")!=true && tokenActual.equals("*")!=true && tokenActual.equals("-")!=true && 
+					      tokenActual.equals("/")!=true && tokenActual.equals(";")!=true && tokenActual.equals(")")!=true)
 					{
 						token=analizadorLexico.nextToken();
 						tokenActual = token.getTok();
