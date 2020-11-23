@@ -378,22 +378,33 @@ public class Compilador extends Frame {
 				Sintactico s = new Sintactico(fichero);
 				error = s.errores;
 				gramatica = s.Producciones;
+				
+				//(A. Sintactico) que producciones se utilizo...
 				textAreaProducciones.setText("\n");
 				for (int i = 0; i < gramatica.size(); i++) {
 					textAreaProducciones.append(((String) gramatica.get(i)) + "\n");
 				}
+				
+				//(A. Sintactico)para ver en pila que se utilizo (estados de la pila en cada iterasion).
 				pila = s.EstadoPila;
-				textAreaPila.setText("\n\n");
+				textAreaPila.setText("\n");
 				for (int i = 0; i < pila.size(); i++) {
 					textAreaPila.append(((String) pila.get(i)) + "\n");
 				}
+				
+				//(A. Lexico) simbolos que genero el A. Lexico.. 
 				textAreaSimbolos.setText("\n");
 				for(int i=0; i<s.analizadorLexico.simbolos.size();i++)
 					textAreaSimbolos.append(((Simbolo)s.analizadorLexico.simbolos.get(i)).getSimbolo()+"\n");
+				
+				
+				//(A. Lexico)Tokens que se genero. en el A. Lexico..
 				textAreaTokens.setText("\n");
 				textAreaTokens.append(s.analizadorLexico.listadoTokens);
+				
 				if (error.size()> 0)
 					textAreaErrores.append("\nMostrar errores\n");
+				
 				for (int i = 0; i < error.size(); i++) {
 					textAreaErrores.append(((Error) error.get(i)).getError()
 							+ " en ");
@@ -402,12 +413,16 @@ public class Compilador extends Frame {
 					textAreaErrores.append(", columna "
 							+ ((Error) error.get(i)).getNumColumna() + "\n");
 				}
+				
+				
 				textAreaErrores.append("\nNúmero de errores: " + error.size());
-				if (/*s.contError*/ error.size()== 10)
-					textAreaErrores.append("\nEl numero de errores supera los permitidos. \nLa compilacion ha Finputsalizado");
-				if (/*s.contError*/ error.size()== 0)
-					textAreaErrores.append("\nLa compilacion no ha detectado errores. \nLa compilacion ha Finputsalizado");
-				if (/*s.contError*/ error.size()> 0)
+				
+				
+				if (error.size()== 10)
+					textAreaErrores.append("\nEl numero de errores supera los permitidos. \nLa compilacion ha Finalizado");
+				if (error.size()== 0)
+					textAreaErrores.append("\nLa compilacion no ha detectado errores. \nLa compilacion ha Finalizado");
+				if ( error.size()> 0)
 					textAreaErrores.append("\nSe han detectado errores. La compilacion ha finalizado");
 			}
 		} catch (NoSuchElementException e) {

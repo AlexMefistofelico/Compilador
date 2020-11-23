@@ -1,14 +1,14 @@
-/**DESDE AQUI GLC*/
-/**
+/**DESDE AQUI GLC LL(1)
+
 <programa>				->	begin <declaraciones><ordenes> end
 <declaraciones>			->	<declaracion>;<sig_declaraciones>
-<sig_declaraciones>		->	<declaracion>;<sig_declaraciones>| ? 
+<sig_declaraciones>		->	<declaracion>;<sig_declaraciones>| Œª
 <declaracion>			->	<tipo><lista_variables>
 <tipo>					->	entero|real
 <lista_variables>		->	identificador <sig_lista_variables>
-<sig_lista_variables>	->	,<lista_variables>| ?
+<sig_lista_variables>	->	,<lista_variables>| Œª
 <ordenes>				->	<orden>;<sig_ordenes>
-<sig_ordenes>			->	<orden>;<sig_ordenes>| ?
+<sig_ordenes>			->	<orden>;<sig_ordenes>| Œª
 <orden>					->	<condicion>|<bucle_while>|<asignar>
 <condicion>				->	if(<comparacion>)<ordenes><sig_condicion>
 <sig_condicion>			->	end|else <ordenes> end
@@ -19,29 +19,25 @@
 <bucle_while>			->	while(<comparacion>)<ordenes>endwhile
 <asignar>				->	identificador := <expresion_arit>
 <expresion_arit>		->	(<expresion_arit><operador_arit><expresion_arit>)<exp_arit>|identificador <exp_arit>|<numeros><exp_arit>
-<exp_arit>				->	<operador_arit><expresion_arit><exp_arit>| ?
+<exp_arit>				->	<operador_arit><expresion_arit><exp_arit>| Œª
 <operador_arit>			->	+|*|-|/
-
-
 
 
 PARA NUESTRO PROPOSITO....
 
-
-
 <programa>				->	begin <declaraciones><ordenes> end
 <declaraciones>			->	<declaracion>;<sig_declaraciones>
 <sig_declaraciones>		->	<declaracion>;<sig_declaraciones>
-<sig_declaraciones>		->	? 
+<sig_declaraciones>		->	Œª
 <declaracion>			->	<tipo><lista_variables>
 <tipo>					->	entero
 <tipo>					->	real
 <lista_variables>		->	identificador <sig_lista_variables>
 <sig_lista_variables>	->	,<lista_variables>
-<sig_lista_variables>	->	?
+<sig_lista_variables>	->	Œª
 <ordenes>				->	<orden>;<sig_ordenes>
 <sig_ordenes>			->	<orden>;<sig_ordenes>
-<sig_ordenes>			->	?
+<sig_ordenes>			->	Œª
 <orden>					->	<condicion>
 <orden>					->	<bucle_while>
 <orden>					->	<asignar>
@@ -65,111 +61,119 @@ PARA NUESTRO PROPOSITO....
 <expresion_arit>		->	identificador <exp_arit>
 <expresion_arit>		->	<numeros><exp_arit>
 <exp_arit>				->	<operador_arit><expresion_arit><exp_arit>
-<exp_arit>				->	?
+<exp_arit>				->	Œª
 <operador_arit>			->	+
 <operador_arit>			->	*
 <operador_arit>			->	-
 <operador_arit>			->	/
 
+/** TERMINALES PARA NUESTRO PROPOSITO... 
+
+begin           end     ;           entero    real
+identificador   ,       if          (         )
+else            =       <=          >=        <>
+<               >       num_entero  num_real  while
+endwhile        :=      +           *     	  -    
+/				Œª
 
 */
 
 
 import java.util.*;
 /**
- * Clase que simula el comportamiento del Analizador Sint·ctico
+ * Clase que simula el comportamiento del Analizador Sint√°ctico
  * @author INF-3631
  * @version 11/11/2020
  */
 public class Sintactico{
 	/**
-	 * N˙mero m·ximo de errores que puede tener la compilaciÛn antes de saltar.
+	 * N√∫mero m√°ximo de errores que puede tener la compilaci√≥n antes de saltar.
 	 */
 	int NROERRORES = 10;	
 	/**
-	 * N˙mero de elementos terminales que tiene la gram·tica
+	 * N√∫mero de elementos terminales que tiene la gram√°tica
 	 */
 	int nroTerminales = 28;
 	/**
-	 * N˙mero de no terminales que tiene la gram·tica
+	 * N√∫mero de no terminales que tiene la gram√°tica
 	 */
 	int nroNoTerminales = 21;
 	/**
-	 * TamaÒo m·ximo de una producciÛn de nuestra gram·tica (n˙mero m·ximo de terminales y no terminales que puede tener)
+	 * Tama√±o m√°ximo de una producci√≥n de nuestra gram√°tica (n√∫mero m√°ximo de terminales y no terminales que puede tener)
 	 */
 	int produccion = 6;
 	/**
-	 * N˙mero de errores que tiene el cÛdigo en cada momento de compilaciÛn
+	 * N√∫mero de errores que tiene el c√≥digo en cada momento de compilaci√≥n
 	 */
 	int contError;
 	/**
-	 * Tabla de An·lsis Sint·ctico Predictivo y No Recursivo
+	 * Tabla de An√°lsis Sint√°ctico Predictivo y No Recursivo
 	 */
 	String tablaAS[][][] = new String[nroNoTerminales][nroTerminales][produccion];
 	/**
-	 * Pila del Analizador Sint·ctico Predictivo y No Recursivo
+	 * Pila del Analizador Sint√°ctico Predictivo y No Recursivo
 	 */
 	ArrayList Pila = new ArrayList();
 	/**
-	 * Variable donde almacenar el token que se est· evaluando en ese momento
+	 * Variable donde almacenar el token que se est√° evaluando en ese momento
 	 */
 	Token token;
 	/**
-	 * Variable donde almacenar el token que se va a evaluar a continuaciÛn
-	 * (sÛlo se usa para la gestiÛn de errores)
+	 * Variable donde almacenar el token que se va a evaluar a continuaci√≥n
+	 * (s√≥lo se usa para la gesti√≥n de errores)
 	 */
 	Token tokenSig;
 	/**
-	 * Variable que me indica si el siguiente token est· en tokenSig o lo tengo que pedir mediante nextToken()
+	 * Variable que me indica si el siguiente token est√° en tokenSig o lo tengo que pedir mediante nextToken()
 	 */
 	boolean pedido=false;
 	/**
-	 * Vector que contiene los errores lÈxicos y sint·cticos de la fase de compilaciÛn
+	 * Vector que contiene los errores l√©xicos y sint√°cticos de la fase de compilaci√≥n
 	 */
 	ArrayList errores ;
 	/**
-	 * Objeto que gestiona el comportamiento del Analizador LÈxico
+	 * Objeto que gestiona el comportamiento del Analizador L√©xico
 	 */
 	Lexico analizadorLexico;
 	/**
-	 * Vector donde se guarda el estado de la pila en cada iteraciÛn del analizador sint·ctico (sÛlo sirve para mostrar dicha informaciÛn por pantalla)
+	 * Vector donde se guarda el estado de la pila en cada iteraci√≥n del analizador sint√°ctico (s√≥lo sirve para mostrar dicha informaci√≥n por pantalla)
 	 */
 	ArrayList EstadoPila = new ArrayList();	
 	/**
-	 * Variable que guarda los terminales y no terminales de la siguientes producciÛn a realizar (sÛlo sirve para mostrar dicha informaciÛn por pantalla)
+	 * Variable que guarda los terminales y no terminales de la siguientes producci√≥n a realizar (s√≥lo sirve para mostrar dicha informaci√≥n por pantalla)
 	 */
 	String gramatica;					
 	/**
-	 * Vector que guarda todas las producciones dadas por la variable "gram·tica" (sÛlo sirve para mostrar dicha informaciÛn por pantalla)
+	 * Vector que guarda todas las producciones dadas por la variable "gram√°tica" (s√≥lo sirve para mostrar dicha informaci√≥n por pantalla)
 	 */
 	ArrayList Producciones = new ArrayList();
 	
 	/**
-	 * MÈtodo constructor que crea el objeto Sint·ctico
-	 *@param codigo cÛdigo fuente a compilar
+	 * M√©todo constructor que crea el objeto Sint√°ctico
+	 *@param codigo c√≥digo fuente a compilar
 	 */
 	public Sintactico(String []codigo){
-		analizadorLexico = new Lexico(codigo); 			//Objeto que simula el Analizador LÈxico
+		analizadorLexico = new Lexico(codigo); 			//Objeto que simula el Analizador L√©xico
 		int filaTabla=0, columnaTabla=0;				// Columna y fila de la tabla de AS.
 		String cimaPila;								// Cima de la pila.
 		token=analizadorLexico.nextToken();				//Leo el primer token del programa a compilar
 		errores = analizadorLexico.errores;				// Tabla de errores.
-		contError = errores.size();						// Contador de errores iniciliazado con el numero de errores lÈxicos.
+		contError = errores.size();						// Contador de errores iniciliazado con el numero de errores l√©xicos.
 		// Insertamos el primer elemento de la pila que es $.
 		Pila.add("$");
 
-		// Insertamos el segundo elemento de la pila que es la variable inicial de la gram·tica.
+		// Insertamos el segundo elemento de la pila que es la variable inicial de la gram√°tica.
 		Pila.add("<programa>");
 		
-		// Creamos la tabla de An·lisis Sint·ctico.
+		// Creamos la tabla de An√°lisis Sint√°ctico.
 		crearTablaDeAnalisisSintactico();
 		String pilaActual;
-		/*Este bucle lo utilizamos para que el programa no se salga de la funciÛn
-		mientra el elemento cima de pila sea distinto de $ y el n˙mero de errores sea
-		distinto al n˙mero m·ximo*/
+		/*Este bucle lo utilizamos para que el programa no se salga de la funci√≥n
+		mientra el elemento cima de pila sea distinto de $ y el n√∫mero de errores sea
+		distinto al n√∫mero m√°ximo*/
 		do{
 			
-			//Esto sÛlo sirve para mostrar dicha informaciÛn por pantalla
+			//Esto s√≥lo sirve para mostrar dicha informaci√≥n por pantalla
 			pilaActual="";
 			//Estado de la pila en cada iteraccion.
 			for(int i=0; i<Pila.size();i++)
@@ -188,7 +192,7 @@ public class Sintactico{
 				if(cimaPila.equals("beginend") ||  cimaPila.equals("$")){
 				
 					eliminarPila();
-					// Esto sÛlo sirve para mostrar dicha informaciÛn por pantalla
+					// Esto s√≥lo sirve para mostrar dicha informaci√≥n por pantalla
 					Producciones.add("Eliminar terminal -> " + cimaPila);
                 
                 }else{
@@ -196,7 +200,7 @@ public class Sintactico{
 				
 					if(cimaPila.equals(token.getTok())){
 						eliminarPila();    // Eliminar elemento de la pila
-						//Esto sÛlo sirve para mostrar dicha informaciÛn por pantalla
+						//Esto s√≥lo sirve para mostrar dicha informaci√≥n por pantalla
 						Producciones.add("Eliminar terminal -> " + cimaPila);
 						
 						if(pedido!=true)
@@ -236,14 +240,14 @@ public class Sintactico{
 				
 				/*
 				 * Si la tabla de AS en la posicion indicada contiene 
-				 * una producciÛn, entonces continuamos insertandola en la pila 
+				 * una producci√≥n, entonces continuamos insertandola en la pila 
 				 * y aplicando el semantico.
 				 */
-				if(tablaAS[filaTabla][columnaTabla][0]!=null){
+				if(tablaAS[filaTabla][columnaTabla][0]!=null){ 
 					// Eliminamos no terminal de la pila.
 					eliminarPila();
 				
-					//Esto sÛlo sirve para mostrar dicha informaciÛn por pantalla
+					//Esto s√≥lo sirve para mostrar dicha informaci√≥n por pantalla
                     Producciones.add("Eliminar no terminal -> " + cimaPila);
 				
 					// Insertamos la produccion correspondiente.
@@ -260,7 +264,7 @@ public class Sintactico{
 	} // Fin del sintactico.
 	
 	/**
-	 * Metodo p˙blico para crear la tabla de simbolos.
+	 * Metodo p√∫blico para crear la tabla de simbolos.
 	 */
 	public void crearTablaDeAnalisisSintactico(){
 		/*
@@ -301,7 +305,7 @@ public class Sintactico{
 		tablaAS[2][4][2] = "<sig_declaraciones>";
 		/*
 		 * Produccion
-		 * <sig_declaraciones> -> ? 
+		 * <sig_declaraciones> -> Œª 
 		 */
 		tablaAS[2][26][0] = "beginend";
 		/*
@@ -326,7 +330,8 @@ public class Sintactico{
 		 */
 		tablaAS[4][4][0] = "real";
 		/*
-		 * Produccion <lista_variables> -> identificador <sig_lista_variables>
+		 * Produccion 
+		 * <lista_variables> -> identificador <sig_lista_variables>
 		 */
 		tablaAS[5][5][0] = "identificador";
 		tablaAS[5][5][1] = "<sig_lista_variables>";
@@ -576,7 +581,7 @@ public class Sintactico{
 		tablaAS[19][25][2] = "<exp_arit>";
 		/*
 		 * Produccion 
-		 * <exp_arit> -> ?
+		 * <exp_arit> -> Œª
 		 */
 		tablaAS[19][26][0] = "beginend";
 		/*
@@ -600,9 +605,10 @@ public class Sintactico{
 		 */
 		tablaAS[20][25][0] = "/";
 	}
+
 	
 	/**
-	 * MÈtodo que nos devuelve si la la cima de pila es o no terminal
+	 * M√©todo que nos devuelve si la la cima de pila es o no terminal
 	 * @param cima Cima de pila en ese instante
 	 * @return variable booleana que indica si la cima es un terminal o un no terminal
 	 */
@@ -617,16 +623,16 @@ public class Sintactico{
 	}
 	
 	/**
-	 * MÈtodo que inserta una nueva producciÛn en la pila.
-	 * @param Pila Pila del analizador sint·ctico predictivo no recursivo
-	 * @param fila Fila en la que se encuentra la cima de pila en la tabla de sÌmbolos
-	 * @param columna Columna en la que se encuentra la cima de pila en la tabla de sÌmbolos
+	 * M√©todo que inserta una nueva producci√≥n en la pila.
+	 * @param Pila Pila del analizador sint√°ctico predictivo no recursivo
+	 * @param fila Fila en la que se encuentra la cima de pila en la tabla de s√≠mbolos
+	 * @param columna Columna en la que se encuentra la cima de pila en la tabla de s√≠mbolos
 	 * @param cima Elemento que hay en la cia de pila en ese momento
 	 */
 	public void insertarPila(int fila, int columna, String cima){
 		int i = 0;			// indice
-		int contPila=0;		// Indicar· el n˙mero de elementos que tiene la produciÛn.
-		gramatica = "";		// Se almacenar· la produccion (sÛlo sirve para mostrar dicha informaciÛn por pantalla)
+		int contPila=0;		// Indicar√° el n√∫mero de elementos que tiene la produci√≥n.
+		gramatica = "";		// Se almacenar√° la produccion (s√≥lo sirve para mostrar dicha informaci√≥n por pantalla)
 
 		// Obtenemos el numero maximo de elementos de la produccion.
 		while(contPila<produccion && (tablaAS[fila][columna][contPila])!=null){
@@ -636,34 +642,36 @@ public class Sintactico{
 		contPila--;
 
 		for(i = contPila; i>=0; i--){
-			// Esto sÛlo sirve para mostrar dicha informaciÛn por pantalla
+			// Esto s√≥lo sirve para mostrar dicha informaci√≥n por pantalla
 			gramatica = (tablaAS[fila][columna][i]) + " " + gramatica;
-			//Inserto la producciÛn en la pila
+			//Inserto la producci√≥n en la pila
 			Pila.add(tablaAS[fila][columna][i]);
 		}
 			
-		// Esto sÛlo sirve para mostrar dicha informaciÛn por pantalla
+		// Esto s√≥lo sirve para mostrar dicha informaci√≥n por pantalla
 		gramatica = cima + " --> " + gramatica;
+		//<programa> --> begin <declaraciones><ordenes> end
+		//solo para mejor entender.... 
 		Producciones.add(gramatica);
 	}
 	
 	/**
-	 * MÈtodo p˙blico para eliminar el primer elemento de la pila.
+	 * M√©todo p√∫blico para eliminar el primer elemento de la pila.
 	 */
 	public void eliminarPila(){
 		Pila.remove(Pila.size()-1);
 	}
 	
 	/**
-	 * MÈtodo p˙blico para la gestiÛn de los errores sint·cticos.
-	 * @param cima Elemento que hay en la cia de pila en ese momento
-	 * @param fila Fila en la que se encuentra la cima de pila en la tabla de sÌmbolos
-	 * @param columna Columna en la que se encuentra la cima de pila en la tabla de sÌmbolos
+	 * M√©todo p√∫blico para la gesti√≥n de los errores sint√°cticos.
+	 * @param cima Elemento que hay en la cima de pila en ese momento
+	 * @param fila Fila en la que se encuentra la cima de pila en la tabla de s√≠mbolos
+	 * @param columna Columna en la que se encuentra la cima de pila en la tabla de s√≠mbolos
 	 */
 	public void gestionError(String cima, int fila, int columna){
 		int colSig;
 		String cimaSig;
-		// Aumentamos el n˙mero de errores.
+		// Aumentamos el n√∫mero de errores.
 		contError++;
 		
 		if(esTerminal(cima)) //Si la cima es un terminal.
@@ -674,38 +682,39 @@ public class Sintactico{
 		
 			if(cima.equals(tokenSig)) // Error por token excesivo.
 			{
-				errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible token extra."));			
+				errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible token extra."));			
 				token=tokenSig;
 				pedido=false;
 		
 			}
-			else //Error por falta de par·metros.
+			else //Error por falta de par√°metros.
 			{
-				errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible falta de un token"));			
+				errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible falta de un token"));			
 				eliminarPila();
-				//Esto sÛlo sirve para mostrar dicha informaciÛn por pantalla
+				//Esto s√≥lo sirve para mostrar dicha informaci√≥n por pantalla
 				Producciones.add("Eliminar terminal -> " + cima);
 			}
 		}
-		else //Si la cima el un no terminal.
+		else //Si la cima el un NO TERMINAL.
 		{
 			tokenSig=analizadorLexico.nextToken();
 			pedido=true;
 			colSig=this.posicionColumna(tokenSig.getTok());
+			
 			cimaSig=(String)(Pila.get(Pila.size()-2));
 			
 			if(tablaAS[fila][colSig][0]!=null){
 				
 				if(cimaSig.equals(token.getTok()))	// Falta de un parametro.
 				{
-					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible token extra"));			
+					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible token extra"));			
 					eliminarPila();
 					Producciones.add("Eliminar terminal -> " + cima);
 				
 				}
-				else	//Error por p·rametros extra.
+				else	//Error por p√°rametros extra.
 				{
-					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible token extra."));			
+					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible token extra."));			
 					token=tokenSig;
 					pedido=false;
 				}
@@ -714,7 +723,7 @@ public class Sintactico{
 			{	//Error en inicio de programa.
 				if(cima.equals("<programa>")){
 					
-					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Inicio de programa mal especificado, imposible continuar con la compilaciÛn."));			
+					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Inicio de programa mal especificado, imposible continuar con la compilaci√≥n."));			
 					eliminarPila();
 					Producciones.add("Eliminar terminal -> " + cima);
 				
@@ -726,7 +735,7 @@ public class Sintactico{
 						insertarPila(5, 5, cima);
 					
 					else{
-						errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible error en lista de variables."));			
+						errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible error en lista de variables."));			
 						eliminarPila();
 						Producciones.add("Eliminar terminal -> " + cima);
 					}
@@ -734,16 +743,16 @@ public class Sintactico{
 			
 				if(cima.equals("<declaraciones>")){
 					
-					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible error en declaraciones."));			
+					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible error en declaraciones."));			
 					eliminarPila();
 					Producciones.add("Eliminar terminal -> " + cima);
 					insertarPila(fila, 3, cima);
 			
-				}else  //Error en declaraciÛn.
+				}else  //Error en declaraci√≥n.
 				
 				if(cima.equals("<declaracion>")){
 					
-					errores.add(new Error(token.getNumColumna(), (token).getNumLinea(),"ERROR Sint·tico.- Posible error en una declaraciÛn."));			
+					errores.add(new Error(token.getNumColumna(), (token).getNumLinea(),"ERROR Sint√°tico.- Posible error en una declaraci√≥n."));			
 					eliminarPila();
 					Producciones.add("Eliminar terminal -> " + cima);
 					insertarPila(fila, 3, cima);
@@ -752,22 +761,22 @@ public class Sintactico{
 				
 				if(cima.equals("<tipo>")){
 					
-					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible error en el tipo de declaraciÛn."));			
+					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible error en el tipo de declaraci√≥n."));			
 					eliminarPila();
 					Producciones.add("Eliminar terminal -> " + cima);
 					token=tokenSig;
 					pedido=false;
-				}else //Error en Ûrdenes.
+				}else //Error en √≥rdenes.
 				
 				if(cima.equals("<ordenes>")){
 					
-					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible error en declaraciÛn de Ûrdenes."));			
+					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible error en declaraci√≥n de √≥rdenes."));			
 					insertarPila(fila, 5, cima);
 				
 				}else //Error en una orden.
 				if(cima.equals("<orden>")){
 					
-					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible error en el bloque de la orden."));			
+					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible error en el bloque de la orden."));			
 					eliminarPila();
 					Producciones.add("Eliminar terminal -> " + cima);
 					token=tokenSig;
@@ -780,11 +789,11 @@ public class Sintactico{
 						eliminarPila();
 					}
 					eliminarPila();
-				}else  //Error en la continuaciÛn de la condiciÛn.
+				}else  //Error en la continuaci√≥n de la condici√≥n.
 				
 				if(cima.equals("<sig_condicion>")){
 					
-					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible error 'else' o 'end'."));			
+					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible error 'else' o 'end'."));			
 					eliminarPila();
 					Producciones.add("Eliminar terminal -> " + cima);
 					token=tokenSig;
@@ -793,10 +802,10 @@ public class Sintactico{
 						token=analizadorLexico.nextToken();
 					}
 				}
-				else //Error en la comparaciÛn.
+				else //Error en la comparaci√≥n.
 				if(cima.equals("<comparacion>")){
 					
-					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible error de comparaciÛn."));			
+					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible error de comparaci√≥n."));			
 					eliminarPila();
 					Producciones.add("Eliminar terminal -> " + cima);
 					token=tokenSig;
@@ -804,17 +813,17 @@ public class Sintactico{
 					while(token.equals("else")!=true){
 						token=analizadorLexico.nextToken();
 					}
-				}else //Error en en operador de condiciÛn.
+				}else //Error en en operador de condici√≥n.
 				
 				if(cima.equals("<condicion_op>")){
-					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible error en el operador de comparaciÛn."));			
+					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible error en el operador de comparaci√≥n."));			
 					eliminarPila();
 					Producciones.add("Eliminar terminal -> " + cima);
 				}else //Error en operador.
 				
 				if(cima.equals("<operador>")){
 					String tokenActual="";
-					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible falta de operador."));			
+					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible falta de operador."));			
 					eliminarPila();
 					Producciones.add("Eliminar terminal -> " + cima);
 					token=tokenSig;
@@ -822,16 +831,16 @@ public class Sintactico{
 					tokenActual = token.getTok();
 					while(tokenActual.equals(")")!=true && tokenActual.equals("=")!=true && tokenActual.equals("<=")!=true && 
 					      tokenActual.equals(">=")!=true && tokenActual.equals("<>")!=true && tokenActual.equals("<")!=true && 
-					      tokenActual.equals(">")!=true)
-					{
-						token=analizadorLexico.nextToken();
-						tokenActual = token.getTok();
+					      tokenActual.equals(">")!=true){
+						
+								token=analizadorLexico.nextToken();
+								tokenActual = token.getTok();
 					}
-				}else //Error en expresiÛn aritmÈtica.
+				}else //Error en expresi√≥n aritm√©tica.
 				
 				if(cima.equals("<expresion_arit>")){
 					String tokenActual="";
-					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint·tico.- Posible error de expresiÛn aritmÈtica."));			
+					errores.add(new Error(token.getNumColumna(), token.getNumLinea(),"ERROR Sint√°tico.- Posible error de expresi√≥n aritm√©tica."));			
 					
 					eliminarPila();
 					Producciones.add("Eliminar terminal -> " + cima);
@@ -847,12 +856,12 @@ public class Sintactico{
 				}
 			}
 		}
-	} //Fin de mÈtodo
+	} //Fin de m√©todo
 	
 	/**
-	 * Metodo p˙blico para averiguar la fila en la tabla de sÌmbolos de la cima de la pila.
+	 * Metodo p√∫blico para averiguar la fila en la tabla de s√≠mbolos de la cima de la pila.
 	 * @param cima Cima de la Pila.
-	 * @return fila de la cima de la pila en la tabla de sÌmbolos
+	 * @return fila de la cima de la pila en la tabla de s√≠mbolos
 	 */
 	public int posicionFila(String cima){
 		switch (cima) {
@@ -882,9 +891,9 @@ public class Sintactico{
 	}
 
 	/**
-	 * Metodo p˙blico para averiguar la columna en la tabla de sÌmbolos del terminal de la producciÛn.
-	 * @param terminal terminal de la producciÛn
-	 * @return columna del terminal en la tabla de sÌmbolos
+	 * Metodo p√∫blico para averiguar la columna en la tabla de s√≠mbolos del terminal de la producci√≥n.
+	 * @param terminal terminal de la producci√≥n
+	 * @return columna del terminal en la tabla de s√≠mbolos
 	 */
 	public int posicionColumna(String terminal){
 		switch (terminal) {
@@ -914,7 +923,7 @@ public class Sintactico{
     		case "*": 				return 23;
     		case "-": 				return 24;
     		case "/": 				return 25;
-    		case "beginend": 		return 26;//? en la tabla esta asi
+    		case "beginend": 		return 26;//Œª en la tabla esta asi
     		case "$": 				return 27;
     		default : 				return 0;
     	}
