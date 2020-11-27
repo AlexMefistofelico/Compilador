@@ -1,0 +1,31 @@
+/*	NO MODIFICAR ARCHIVO PARA QUE 
+	EL DIAGRAMA DE ARBOL (ARBOL SINTÁCTICO)
+	ESTE DE ACUERDO CON EL CODIGO	*/
+begin
+	entero a,b,c;				//(5)
+	real x,y,z;
+
+	entero variable;				
+
+	if( a < c )					//(10)
+		c := c - 1;
+	end;
+						
+	while(a > 100)				//ciclo
+		a := a +1;			//(15)
+		b := b +2;
+		c := c +3;
+						
+		if( x >= y)				//if externo
+			x := x - 1.555;		//(20)
+		else
+			y := 3.141516 - c + a*b*c;
+						
+			if( y<>11)		//if interno
+				variable := x - 2.4;	//(25)
+			else
+				variable := b*c;
+			end;			
+		end;
+	endwhile;				//(30)
+end

@@ -1,11 +1,9 @@
-
-
-
 /**
  * Clase que muestra el entorno gráfico principalo
  * @author  INF-3631
  * @version 11/11/2020
  */
+
 import java.io.*;
 import java.lang.Object;
 import java.awt.*;
@@ -58,7 +56,7 @@ public class Compilador extends Frame {
 		label4 = new Label();
 		label5 = new Label();
 		labelListadoErrores = new Label();
-
+		setResizable(false);
 		menuBar2.setFont(new Font("Arial", 0, 12));
 		menu2.setName("archivo");
 		menu2.setLabel("Archivo");
